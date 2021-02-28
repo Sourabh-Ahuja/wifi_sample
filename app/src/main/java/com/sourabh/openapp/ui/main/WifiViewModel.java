@@ -1,0 +1,77 @@
+package com.sourabh.openapp.ui.main;
+
+import android.util.Log;
+
+import com.sourabh.openapp.model.Wifi;
+import com.sourabh.openapp.ui.base.BaseViewModel;
+import com.sourabh.openapp.utils.SchedulerProvider;
+import com.sourabh.openapp.utils.SingleLiveEvent;
+
+import java.util.List;
+
+import io.reactivex.disposables.Disposable;
+
+public class WifiViewModel extends BaseViewModel {
+
+    private static final String TAG = "WifiViewModel";
+
+
+    public SingleLiveEvent<List<Wifi>> moviesListLiveEvent = new SingleLiveEvent<>();
+
+    public WifiViewModel(SchedulerProvider schedulerProvider) {
+        super(schedulerProvider);
+    }
+
+    public void fetchMovieList() {
+
+//        Disposable disposable = getAppDataManager().fetchNewsList()
+//                .subscribeOn(getSchedulerProvider().io())
+//                .observeOn(getSchedulerProvider().ui())
+//                .subscribe(moviesListResponseResponse -> {
+//                    Log.e(TAG, "moviesListResponseResponse " +
+//                            moviesListResponseResponse);
+//                    Log.e(TAG, "moviesListResponseResponse 1" + moviesListResponseResponse.
+//                            body());
+//
+//                    moviesListLiveEvent.setValue(moviesListResponseResponse.body().getNewsList());
+//
+//                    saveDataToDB(moviesListResponseResponse.body().getNewsList());
+//
+//                }, throwable -> {
+//
+//                    //showToastMessage(throwable.getMessage());
+//
+//                    fetchDataFromDb();
+//                });
+//
+//        getCompositeDisposable().add(disposable);
+    }
+
+
+    public SingleLiveEvent<List<Wifi>> getNewsList() {
+        return moviesListLiveEvent;
+    }
+
+    private void saveDataToDB(List<Wifi> movieList) {
+//        Disposable disposable = getAppDataManager().insertNewsList(movieList)
+//                .subscribeOn(getSchedulerProvider().io())
+//                .observeOn(getSchedulerProvider().ui())
+//                .subscribe(successValue -> Log.d("DataBase : ", "saving success"),
+//                        throwable -> Log.d("DataBase : ", throwable.getMessage()));
+//
+//        getCompositeDisposable().add(disposable);
+    }
+
+    private void fetchDataFromDb() {
+
+//        Disposable disposable = getAppDataManager().getAllNews()
+//                .subscribeOn(getSchedulerProvider().io())
+//                .observeOn(getSchedulerProvider().ui())
+//                .subscribe(movieList -> moviesListLiveEvent.setValue(movieList), throwable -> {
+//                    Log.d("DataBase : ", throwable.getMessage());
+//                });
+//        getCompositeDisposable().add(disposable);
+
+    }
+
+}

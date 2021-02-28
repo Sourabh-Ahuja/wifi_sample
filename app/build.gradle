@@ -1,0 +1,91 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.sourabh.openapp"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.gsonVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.httpLoggingInterceptorVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.httpLoggingInterceptorVersion"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:$rootProject.httpUrlConnection"
+
+    //chuck
+    debugImplementation "com.readystatesoftware.chuck:library:$rootProject.chuckVersion"
+    releaseImplementation "com.readystatesoftware.chuck:library-no-op:$rootProject.chuckVersion"
+
+    // multidex
+    implementation "com.android.support:multidex:$rootProject.multiDexVersion"
+
+    // RxJava / RxAndroid
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+
+    //Glide : for Image loading
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+    implementation "com.caverock:androidsvg:$rootProject.glideSVGVersion"
+
+    // Dagger 2
+    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+    androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+
+    // room
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    implementation "androidx.room:room-rxjava2:$rootProject.roomVersion"
+
+    //liveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.architectureComponentVersion"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.architectureComponentVersion"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$rootProject.architectureComponentVersion"
+
+    // JUnit Jupiter
+    def junit_jupiter_version = "5.3.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+}
