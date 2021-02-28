@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiViewHolder> {
 
-    private static final String TAG = "HomeFragmentMovieListAd";
+    private static final String TAG = "WifiListAdapter";
 
     @Inject
     Context context;
@@ -77,8 +77,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
             DisplayMetrics displayMetrics = new DisplayMetrics();
             baseActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int height = displayMetrics.heightPixels;
-            int width = displayMetrics.widthPixels;
-//            movieItemViewHolder.wifiItemLayoutBinding.containerItem.getLayoutParams().height = height / 4;
+            movieItemViewHolder.wifiItemLayoutBinding.containerItem.getLayoutParams().height = height / 10;
         }
 
         movieItemViewHolder.bindData(wifiArrayList.get(i));
@@ -99,12 +98,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
         }
 
         public void bindData(Wifi wifi) {
-//            newsItemBinding.setNews(news);
-//            newsItemBinding.setMovieClickListener(movieClickListener);
-//            newsItemBinding.newsDate.setText(CommonUtils.dateToString(news.getPublishedAt()));
-//            newsItemBinding.containerItem.setOnClickListener(v -> {
-//                movieClickListener.onMovieClick(news, newsItemBinding.moviePosterIv);
-//            });
+            wifiItemLayoutBinding.setWifi(wifi);
+            wifiItemLayoutBinding.setWifiClickListener(wifiItemClickListener);
+            wifiItemLayoutBinding.wifiName.setText(wifi.getWifiName());
+            wifiItemLayoutBinding.wifiStrength.setText(wifi.getSignalStrength());
+            wifiItemLayoutBinding.containerItem.setOnClickListener(v -> {
+                wifiItemClickListener.onWifiItemClick(wifi);
+            });
         }
     }
 

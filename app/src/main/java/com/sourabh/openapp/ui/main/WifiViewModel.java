@@ -1,8 +1,12 @@
 package com.sourabh.openapp.ui.main;
 
+import android.net.wifi.ScanResult;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+
 import com.sourabh.openapp.model.Wifi;
+import com.sourabh.openapp.repo.WifiRepository;
 import com.sourabh.openapp.ui.base.BaseViewModel;
 import com.sourabh.openapp.utils.SchedulerProvider;
 import com.sourabh.openapp.utils.SingleLiveEvent;
@@ -16,10 +20,10 @@ public class WifiViewModel extends BaseViewModel {
     private static final String TAG = "WifiViewModel";
 
 
-    public SingleLiveEvent<List<Wifi>> moviesListLiveEvent = new SingleLiveEvent<>();
+    public SingleLiveEvent<List<ScanResult>> wifiLiveEvent = new SingleLiveEvent<>();
 
-    public WifiViewModel(SchedulerProvider schedulerProvider) {
-        super(schedulerProvider);
+    public WifiViewModel(WifiRepository wifiRepository, SchedulerProvider schedulerProvider) {
+        super(wifiRepository,schedulerProvider);
     }
 
     public void fetchMovieList() {
@@ -47,10 +51,10 @@ public class WifiViewModel extends BaseViewModel {
 //        getCompositeDisposable().add(disposable);
     }
 
-
-    public SingleLiveEvent<List<Wifi>> getNewsList() {
-        return moviesListLiveEvent;
+    public LiveData<List<ScanResult>> getWifiList() {
+        return wifiRepository.getWifiList();
     }
+
 
     private void saveDataToDB(List<Wifi> movieList) {
 //        Disposable disposable = getAppDataManager().insertNewsList(movieList)

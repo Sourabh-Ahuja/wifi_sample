@@ -16,7 +16,8 @@ public class WifiListFragmentModule {
 
     @Provides
     LinearLayoutManager provideGridLayoutManager(WifiListFragment newsListFragment) {
-        return new GridLayoutManager(newsListFragment.getContext(), 2, LinearLayoutManager.VERTICAL, false);
+        return new GridLayoutManager(newsListFragment.getContext(), 2,
+                LinearLayoutManager.VERTICAL, false);
     }
 
 }

@@ -5,6 +5,7 @@ import android.app.Application;
 import com.sourabh.openapp.OpenAppApplication;
 import com.sourabh.openapp.di.builder.ActivityBuilderModule;
 import com.sourabh.openapp.di.module.AppModule;
+import com.sourabh.openapp.di.module.NetworkModule;
 
 import javax.inject.Singleton;
 import dagger.BindsInstance;
@@ -17,6 +18,7 @@ import dagger.android.AndroidInjectionModule;
         modules = {
                 AndroidInjectionModule.class,
                 AppModule.class,
+                NetworkModule.class,
                 ActivityBuilderModule.class,
         }
 )

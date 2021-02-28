@@ -1,17 +1,17 @@
 package com.sourabh.openapp.ui.main;
 
-import android.app.AlertDialog;
+
+import android.net.wifi.ScanResult;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.sourabh.openapp.R;
 import com.sourabh.openapp.databinding.WifiListFragmentBinding;
 import com.sourabh.openapp.model.Wifi;
 import com.sourabh.openapp.ui.base.BaseFragment;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,9 +21,7 @@ import javax.inject.Inject;
 public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragmentBinding>
         implements WifiListAdapter.WifiItemClickListener {
 
-    private static final String TAG = "HomeFragment";
-    String selectedOrder = "Date";
-    int checkedItem = 0;
+    private static final String TAG = "WifiListFragment";
 
     @Inject
     WifiViewModel wifiViewModel;
@@ -32,10 +30,6 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
     WifiListAdapter movieListAdapter;
 
     private FragmentCommunicationListener fragmentCommunicationListener;
-
-    private List<Wifi> wifiArrayList = new ArrayList<>();
-    private boolean isCallFromNetwork = false;
-
 
     public static WifiListFragment newInstance() {
         return new WifiListFragment();
@@ -58,41 +52,40 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
     @Override
     public void initObservers() {
 
-//        wifiViewModel.getMovieList().observe(this,
+//        wifiViewModel.getWifiList().observe(this,
 //                entityMovies -> inItRecyclerView(entityMovies));
 //        Log.e(TAG,"initObservers");
+
+        wifiViewModel.getWifiList().observe(this, scanResults -> {
+               ArrayList<Wifi> wifiArrayList = new ArrayList<>();
+                for(ScanResult scanResult : scanResults){
+                    Wifi wifi = new Wifi(scanResult.SSID);
+                    wifi.setSignalStrength(String.valueOf(scanResult.level));
+                    wifiArrayList.add(wifi);
+                    Log.e(TAG, "wifi name " + scanResult.SSID + " signal speed "
+                     + scanResult.level);
+                }
+                inItRecyclerView(wifiArrayList);
+        });
 
     }
 
     @Override
     public void setUp(View view) {
+        Log.e(TAG,"Wifi list fragment loaded");
 
-//        if (wifiArrayList == null || wifiArrayList.isEmpty()) {
-//            isCallFromNetwork = true;
-//            dataBinding.setShouldShowLoadingBar(true);
-//            newsViewModel.fetchMovieList();
-//        } else {
-//            isCallFromNetwork = false;
-//        }
-//        dataBinding.sort.setOnClickListener(v -> {
-//            showAlertDialog(movieList);
-//        });
     }
 
-    private void inItRecyclerView(List<Wifi> movieList) {
-
-        this.wifiArrayList.clear();
-        this.wifiArrayList.addAll(Objects.requireNonNull(movieList));
-
-//        dataBinding.movieListRv.setHasFixedSize(true);
-//        dataBinding.setShouldShowLoadingBar(false);
-//        dataBinding.movieListRv.setLayoutManager(
-//                new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
-//        dataBinding.movieListRv.setAdapter(movieListAdapter);
-//        movieListAdapter.clearList(!isCallFromNetwork);
-//        movieListAdapter.addData(movieList);
-//        movieListAdapter.setBaseActivity(baseActivity);
-//        movieListAdapter.setMovieClickListener(this);
+    private void inItRecyclerView(List<Wifi> wifiList) {
+        Log.e(TAG,"inItRecyclerView " + wifiList);
+        dataBinding.wifiRecycler.setHasFixedSize(true);
+        dataBinding.wifiRecycler.setLayoutManager(
+                new LinearLayoutManager(getActivity(),
+                        LinearLayoutManager.VERTICAL,false));
+        dataBinding.wifiRecycler.setAdapter(movieListAdapter);
+        movieListAdapter.addData(wifiList);
+        movieListAdapter.setBaseActivity(baseActivity);
+        movieListAdapter.setMovieClickListener(this);
     }
 
     @Override
@@ -101,4 +94,5 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
             fragmentCommunicationListener.onWifiClicked(wifi);
         }
     }
+
 }

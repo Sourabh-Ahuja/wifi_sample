@@ -11,8 +11,10 @@ import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.Observer;
 
 import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public abstract class BaseActivity<Binding extends ViewDataBinding, VM extends BaseViewModel> extends AppCompatActivity {
+public abstract class BaseActivity<Binding extends ViewDataBinding, VM extends BaseViewModel>
+        extends DaggerAppCompatActivity {
 
 
     /**

@@ -1,13 +1,9 @@
 package com.sourabh.openapp.di.module;
 
-
-import android.app.Application;
 import android.content.Context;
-import androidx.room.Room;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sourabh.openapp.database.AppDataBase;
 import com.sourabh.openapp.database.AppDbHelper;
 import com.sourabh.openapp.database.AppDbHelperImpl;
 import com.sourabh.openapp.di.ApplicationContext;
@@ -21,20 +17,33 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class AppModule {
+public class NetworkModule {
+
 
     @Provides
-    @ApplicationContext
-    Context providesContext(Application application) {
-        return application;
+    @Singleton
+    SchedulerProvider provideSchedulerProvider() {
+        return new AppSchedulerProvider();
     }
 
     @Provides
     @Singleton
-    AppDataBase providesAppDataBase(@ApplicationContext Context context) {
-        return Room.databaseBuilder(context, AppDataBase.class,
-                "OpenappDatabase").fallbackToDestructiveMigration().build();
+    Gson provideGsonBuilder() {
+
+        return new GsonBuilder().create();
     }
 
+    @Provides
+    @Singleton
+    WifiRepository provideWifiRepository(@ApplicationContext Context context,
+                                            AppDbHelper appDbHelper) {
+        return new WifiRepository(context, appDbHelper);
+    }
+
+    @Provides
+    @Singleton
+    AppDbHelper provideAppDbHelper(AppDbHelperImpl dbHelper) {
+        return dbHelper;
+    }
 
 }

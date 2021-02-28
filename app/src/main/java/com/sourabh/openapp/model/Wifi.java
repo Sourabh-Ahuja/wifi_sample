@@ -23,10 +23,8 @@ public class Wifi implements Parcelable {
     @ColumnInfo(name="signal")
     String signalStrength;
 
-    public Wifi(@NotNull String wifiName, String wifiPassword, String signalStrength){
-        this.wifiPassword = wifiPassword;
+    public Wifi(@NotNull String wifiName){
         this.wifiName = wifiName;
-        this.signalStrength = signalStrength;
     }
 
     protected Wifi(Parcel in) {
