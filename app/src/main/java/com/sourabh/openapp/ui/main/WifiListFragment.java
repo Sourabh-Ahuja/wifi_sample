@@ -85,7 +85,7 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
         dataBinding.wifiRecycler.setAdapter(movieListAdapter);
         movieListAdapter.addData(wifiList);
         movieListAdapter.setBaseActivity(baseActivity);
-        movieListAdapter.setMovieClickListener(this);
+        movieListAdapter.setWifiItemClickListener(this);
     }
 
     @Override
@@ -93,6 +93,11 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
         if (fragmentCommunicationListener != null) {
             fragmentCommunicationListener.onWifiClicked(wifi);
         }
+    }
+
+    @Override
+    public void onSubmitButtonClick(String wifiName, String password) {
+
     }
 
 }

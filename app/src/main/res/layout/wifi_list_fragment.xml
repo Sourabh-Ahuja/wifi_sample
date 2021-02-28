@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textAlignment="center"
-            android:letterSpacing="0.2"
+            android:letterSpacing="0.1"
             android:text="@string/open_app"
             android:textColor="@color/color_white"
             android:textSize="@dimen/tv_gen_29" />

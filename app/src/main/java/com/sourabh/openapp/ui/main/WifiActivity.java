@@ -10,6 +10,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -143,7 +144,8 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
 
     @Override
     public void onWifiClicked(Wifi wifi) {
-
+        PasswordFragment passwordFragment = PasswordFragment.newInstance(wifi);
+        loadFragment(passwordFragment, PASSWORD_FRAGMENT);
     }
 
     @Override

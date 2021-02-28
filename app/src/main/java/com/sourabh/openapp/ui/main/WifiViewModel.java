@@ -22,6 +22,9 @@ public class WifiViewModel extends BaseViewModel {
 
     public SingleLiveEvent<List<ScanResult>> wifiLiveEvent = new SingleLiveEvent<>();
 
+    public SingleLiveEvent<Boolean> booleanSingleLiveEvent = new SingleLiveEvent<>();
+
+
     public WifiViewModel(WifiRepository wifiRepository, SchedulerProvider schedulerProvider) {
         super(wifiRepository,schedulerProvider);
     }
@@ -53,6 +56,14 @@ public class WifiViewModel extends BaseViewModel {
 
     public LiveData<List<ScanResult>> getWifiList() {
         return wifiRepository.getWifiList();
+    }
+
+    public LiveData<Boolean> observeResult() {
+        return booleanSingleLiveEvent;
+    }
+
+    public void connectToWifi(String wifiName, String password) {
+         booleanSingleLiveEvent.setValue(wifiRepository.connectToWifi(wifiName,password).getValue());
     }
 
 

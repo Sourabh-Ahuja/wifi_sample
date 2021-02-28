@@ -30,6 +30,8 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
 
     public interface WifiItemClickListener {
         void onWifiItemClick(Wifi movie);
+
+        void onSubmitButtonClick(String wifiName, String password);
     }
 
     private List<Wifi> wifiArrayList = new ArrayList<>();
@@ -58,7 +60,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
             wifiArrayList.clear();
     }
 
-    public void setMovieClickListener(WifiItemClickListener wifiItemClickListener) {
+    public void setWifiItemClickListener(WifiItemClickListener wifiItemClickListener) {
         this.wifiItemClickListener = wifiItemClickListener;
     }
 
@@ -100,8 +102,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
         public void bindData(Wifi wifi) {
             wifiItemLayoutBinding.setWifi(wifi);
             wifiItemLayoutBinding.setWifiClickListener(wifiItemClickListener);
-            wifiItemLayoutBinding.wifiName.setText(wifi.getWifiName());
-            wifiItemLayoutBinding.wifiStrength.setText(wifi.getSignalStrength());
             wifiItemLayoutBinding.containerItem.setOnClickListener(v -> {
                 wifiItemClickListener.onWifiItemClick(wifi);
             });

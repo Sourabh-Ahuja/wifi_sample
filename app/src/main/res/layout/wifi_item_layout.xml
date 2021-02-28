@@ -18,6 +18,7 @@
         android:id="@+id/container_item"
         android:layout_marginStart="@dimen/dimen_16"
         android:layout_marginEnd="@dimen/dimen_16"
+        android:onClick="@{() -> wifiClickListener.onWifiItemClick(wifi)}"
         android:layout_marginTop="@dimen/dimen_24"
         app:cardCornerRadius="@dimen/dimen_12"
         android:elevation="10dp">
@@ -29,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sourabh"
+                android:text="@{wifi.wifiName}"
                 android:id="@+id/wifi_name"
                 android:textSize="@dimen/tv_gen_24"
                 android:textColor="@color/black"
@@ -41,7 +42,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sourabh"
+                android:text="@{wifi.signalStrength}"
                 android:id="@+id/wifi_strength"
                 android:textSize="@dimen/tv_gen_24"
                 android:textColor="@color/black"

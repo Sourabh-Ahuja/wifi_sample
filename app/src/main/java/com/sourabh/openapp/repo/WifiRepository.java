@@ -31,6 +31,7 @@ public class WifiRepository {
     private WifiManager wifiManager;
 
     public SingleLiveEvent<List<ScanResult>> scanLiveEvent = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> booleanSingleEvent = new SingleLiveEvent<>();
 
 
     @Inject
@@ -57,6 +58,11 @@ public class WifiRepository {
 
     private List<ScanResult> getWifiScanResult(){
         return wifiManager.getScanResults();
+    }
+
+    public LiveData<Boolean> connectToWifi(String wifiName, String password){
+        booleanSingleEvent.setValue(true);
+        return booleanSingleEvent;
     }
 
 

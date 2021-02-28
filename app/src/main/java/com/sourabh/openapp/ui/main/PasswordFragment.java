@@ -1,7 +1,11 @@
 package com.sourabh.openapp.ui.main;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+
+import androidx.lifecycle.Observer;
 
 import com.sourabh.openapp.AppConstants;
 import com.sourabh.openapp.R;
@@ -11,7 +15,10 @@ import com.sourabh.openapp.ui.base.BaseFragment;
 
 import javax.inject.Inject;
 
-public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgamentBinding> {
+public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgamentBinding>
+        implements WifiListAdapter.WifiItemClickListener {
+
+    private static final String TAG = "PasswordFragment";
 
     @Inject
     WifiViewModel wifiViewModel;
@@ -43,23 +50,45 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
 
     @Override
     public void initObservers() {
-
+        wifiViewModel.observeResult().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                Log.e(TAG,"initObservers " + aBoolean);
+            }
+        });
     }
 
     @Override
     public void setUp(View view) {
 
-//        if (getArguments() != null) {
-//            Wifi news = getArguments().getParcelable(AppConstants.BUNDLE_WIFI);
-//            dataBinding.setNews(news);
-//            dataBinding.date.setText(CommonUtils.dateToString(news.getPublishedAt()));
-//        }
-//
-//        dataBinding.backButtonIv.setOnClickListener(v -> {
-//
-//            if (fragmentCommunicationListener != null)
-//                fragmentCommunicationListener.onBackButtonClick();
-//        });
+        if (getArguments() != null) {
+            Wifi wifi = getArguments().getParcelable(AppConstants.BUNDLE_WIFI);
+            dataBinding.setWifi(wifi);
+            dataBinding.setWifiClickListener(this);
+
+            dataBinding.submitButton.setOnClickListener(v -> {
+                if(!TextUtils.isEmpty(dataBinding.passwordField.getText().toString())){
+                    if(dataBinding.passwordField.getText().toString().length() >= 8){
+                        viewModel.connectToWifi(wifi.getWifiName(), dataBinding.passwordField.getText().toString());
+                    } else {
+                        baseActivity.showToast("Password must be greater than " +
+                                "or equal to 8 characters");
+                    }
+                } else {
+                    baseActivity.showToast("Password can not be null");
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void onWifiItemClick(Wifi movie) {
+
+    }
+
+    @Override
+    public void onSubmitButtonClick(String wifiName, String password) {
 
     }
 }
