@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.sourabh.openapp.database.AppDbHelper;
 import com.sourabh.openapp.model.Wifi;
 import com.sourabh.openapp.repo.WifiRepository;
 import com.sourabh.openapp.ui.base.BaseViewModel;
@@ -13,6 +14,8 @@ import com.sourabh.openapp.utils.SingleLiveEvent;
 
 import java.util.List;
 
+import io.reactivex.SingleObserver;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
 public class WifiViewModel extends BaseViewModel {
@@ -20,38 +23,15 @@ public class WifiViewModel extends BaseViewModel {
     private static final String TAG = "WifiViewModel";
 
 
-    public SingleLiveEvent<List<ScanResult>> wifiLiveEvent = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> dBBooleanEvent = new SingleLiveEvent<>();
 
     public SingleLiveEvent<Boolean> booleanSingleLiveEvent = new SingleLiveEvent<>();
 
+    public SingleLiveEvent<Wifi> wifiSingleLiveEvent = new SingleLiveEvent<>();
 
-    public WifiViewModel(WifiRepository wifiRepository, SchedulerProvider schedulerProvider) {
-        super(wifiRepository,schedulerProvider);
-    }
-
-    public void fetchMovieList() {
-
-//        Disposable disposable = getAppDataManager().fetchNewsList()
-//                .subscribeOn(getSchedulerProvider().io())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(moviesListResponseResponse -> {
-//                    Log.e(TAG, "moviesListResponseResponse " +
-//                            moviesListResponseResponse);
-//                    Log.e(TAG, "moviesListResponseResponse 1" + moviesListResponseResponse.
-//                            body());
-//
-//                    moviesListLiveEvent.setValue(moviesListResponseResponse.body().getNewsList());
-//
-//                    saveDataToDB(moviesListResponseResponse.body().getNewsList());
-//
-//                }, throwable -> {
-//
-//                    //showToastMessage(throwable.getMessage());
-//
-//                    fetchDataFromDb();
-//                });
-//
-//        getCompositeDisposable().add(disposable);
+    public WifiViewModel(WifiRepository wifiRepository,
+                         SchedulerProvider schedulerProvider, AppDbHelper appDbHelper) {
+        super(wifiRepository,schedulerProvider, appDbHelper);
     }
 
     public LiveData<List<ScanResult>> getWifiList() {
@@ -63,29 +43,60 @@ public class WifiViewModel extends BaseViewModel {
     }
 
     public void connectToWifi(String wifiName, String password) {
-         booleanSingleLiveEvent.setValue(wifiRepository.connectToWifi(wifiName,password).getValue());
+         Wifi wifi = new Wifi(wifiName);
+         wifi.setWifiPassword(password);
+         if(wifiRepository.connectToWifi(wifiName,password)){
+             booleanSingleLiveEvent.setValue(true);
+             saveConnectedWifiToDB(wifi);
+         } else {
+             booleanSingleLiveEvent.setValue(false);
+         }
     }
 
+    private void saveConnectedWifiToDB(Wifi wifi) {
+        Disposable disposable = getAppDbHelper().insertWifi(wifi)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(successValue -> Log.d("DataBase : ", "saving success"),
+                        throwable -> Log.d("DataBase : ", throwable.getMessage()));
 
-    private void saveDataToDB(List<Wifi> movieList) {
-//        Disposable disposable = getAppDataManager().insertNewsList(movieList)
-//                .subscribeOn(getSchedulerProvider().io())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(successValue -> Log.d("DataBase : ", "saving success"),
-//                        throwable -> Log.d("DataBase : ", throwable.getMessage()));
-//
-//        getCompositeDisposable().add(disposable);
+        getCompositeDisposable().add(disposable);
     }
 
-    private void fetchDataFromDb() {
+    public LiveData<Wifi> getWifiLiveData() {
+        return wifiSingleLiveEvent;
+    }
 
-//        Disposable disposable = getAppDataManager().getAllNews()
-//                .subscribeOn(getSchedulerProvider().io())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(movieList -> moviesListLiveEvent.setValue(movieList), throwable -> {
-//                    Log.d("DataBase : ", throwable.getMessage());
-//                });
-//        getCompositeDisposable().add(disposable);
+    private void setWifiSingleLiveEvent(Wifi wifi) {
+        wifiSingleLiveEvent.setValue(wifi);
+    }
+
+    public LiveData<Boolean> observeFromDb() {
+        return dBBooleanEvent;
+    }
+
+    public void fetchDataFromDb(Wifi wifi) {
+        setWifiSingleLiveEvent(wifi);
+        Disposable disposable = getAppDbHelper().getAllWifi()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(wifiList -> {
+                    Log.e(TAG,"wifiList " + wifiList.toString());
+                    boolean isNetworkSavedInDb = false;
+                           for(Wifi dbwifi : wifiList){
+                               if(dbwifi.getWifiName().equalsIgnoreCase(wifi.getWifiName())){
+                                   isNetworkSavedInDb = true;
+                                   booleanSingleLiveEvent.setValue(wifiRepository.
+                                           connectToWifi(dbwifi.getWifiName(),dbwifi.getWifiPassword()));
+                                   break;
+                               }
+                           }
+                          dBBooleanEvent.setValue(isNetworkSavedInDb);
+                        }
+                        ,throwable -> {
+                    Log.d("DataBase : ", throwable.getMessage());
+                });
+        getCompositeDisposable().add(disposable);
 
     }
 

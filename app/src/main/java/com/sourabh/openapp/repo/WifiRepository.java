@@ -2,6 +2,7 @@ package com.sourabh.openapp.repo;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,8 +32,6 @@ public class WifiRepository {
     private WifiManager wifiManager;
 
     public SingleLiveEvent<List<ScanResult>> scanLiveEvent = new SingleLiveEvent<>();
-    public SingleLiveEvent<Boolean> booleanSingleEvent = new SingleLiveEvent<>();
-
 
     @Inject
     public WifiRepository(Context context, AppDbHelper appDbHelper) {
@@ -60,10 +59,24 @@ public class WifiRepository {
         return wifiManager.getScanResults();
     }
 
-    public LiveData<Boolean> connectToWifi(String wifiName, String password){
-        booleanSingleEvent.setValue(true);
-        return booleanSingleEvent;
+    public boolean connectToWifi(String networkSSID, String networkPassword){
+        if (!wifiManager.isWifiEnabled()) {
+            wifiManager.setWifiEnabled(true);
+        }
+
+
+        WifiConfiguration conf = new WifiConfiguration();
+        conf.SSID = String.format("\"%s\"", networkSSID);
+        conf.preSharedKey = String.format("\"%s\"", networkPassword);
+
+        int netId = wifiManager.addNetwork(conf);
+        wifiManager.disconnect();
+        wifiManager.enableNetwork(netId, true);
+        Log.e(TAG,"connectToWifi called netId " + netId + " networkPassword " + networkPassword);
+        return wifiManager.reconnect();
     }
+
+
 
 
 }

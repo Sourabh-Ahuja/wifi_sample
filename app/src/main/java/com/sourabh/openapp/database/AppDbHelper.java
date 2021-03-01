@@ -8,7 +8,7 @@ import io.reactivex.Single;
 
 public interface AppDbHelper {
 
-    Single<List<Long>> insertWifiList(List<Wifi> news);
+    Single<Long> insertWifi(Wifi wifi);
 
     Single<List<Wifi>> getAllWifi();
 

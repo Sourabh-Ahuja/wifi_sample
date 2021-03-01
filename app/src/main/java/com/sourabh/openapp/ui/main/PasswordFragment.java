@@ -50,10 +50,13 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
 
     @Override
     public void initObservers() {
-        wifiViewModel.observeResult().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                Log.e(TAG,"initObservers " + aBoolean);
+        wifiViewModel.observeResult().observe(this, aBoolean -> {
+            Log.e(TAG,"initObservers " + aBoolean);
+            if(aBoolean){
+                baseActivity.showToast("Connected to wifi");
+                baseActivity.onBackPressed();
+            } else {
+                baseActivity.showToast("Something went wrong please try again");
             }
         });
     }
@@ -69,7 +72,8 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
             dataBinding.submitButton.setOnClickListener(v -> {
                 if(!TextUtils.isEmpty(dataBinding.passwordField.getText().toString())){
                     if(dataBinding.passwordField.getText().toString().length() >= 8){
-                        viewModel.connectToWifi(wifi.getWifiName(), dataBinding.passwordField.getText().toString());
+                        viewModel.connectToWifi(wifi.getWifiName(),
+                                dataBinding.passwordField.getText().toString());
                     } else {
                         baseActivity.showToast("Password must be greater than " +
                                 "or equal to 8 characters");

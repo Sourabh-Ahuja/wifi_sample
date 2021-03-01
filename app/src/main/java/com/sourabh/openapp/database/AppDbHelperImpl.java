@@ -20,13 +20,10 @@ public class AppDbHelperImpl implements AppDbHelper {
     }
 
     @Override
-    public Single<List<Long>> insertWifiList(List<Wifi> wifiList) {
+    public Single<Long> insertWifi(Wifi wifi) {
         List<Long> longList = new ArrayList<>();
         return Single.fromCallable(() -> {
-            for(Wifi entityNews : wifiList){
-                longList.add(appDataBase.getDaoWifi().insertWifi(entityNews));
-            }
-            return longList;
+          return appDataBase.getDaoWifi().insertWifi(wifi);
         });
     }
 

@@ -4,6 +4,7 @@ package com.sourabh.openapp.ui.base;
 import androidx.lifecycle.ViewModel;
 
 
+import com.sourabh.openapp.database.AppDbHelper;
 import com.sourabh.openapp.repo.WifiRepository;
 import com.sourabh.openapp.utils.SchedulerProvider;
 import com.sourabh.openapp.utils.ToastMessageLiveEvent;
@@ -18,12 +19,15 @@ public abstract class BaseViewModel extends ViewModel {
     public SchedulerProvider schedulerProvider;
     public WifiRepository wifiRepository;
     private CompositeDisposable compositeDisposable;
+    private AppDbHelper appDbHelper;
 
 
-    public BaseViewModel(WifiRepository wifiRepository, SchedulerProvider schedulerProvider) {
+    public BaseViewModel(WifiRepository wifiRepository, SchedulerProvider schedulerProvider,
+                        AppDbHelper appDbHelper) {
         this.schedulerProvider = schedulerProvider;
         this.wifiRepository = wifiRepository;
         this.compositeDisposable = new CompositeDisposable();
+        this.appDbHelper = appDbHelper;
     }
 
     public SchedulerProvider getSchedulerProvider() {
@@ -37,6 +41,11 @@ public abstract class BaseViewModel extends ViewModel {
     public ToastMessageLiveEvent getToastMessageLiveEvent() {
         return toastMessageLiveEvent;
     }
+
+    public AppDbHelper getAppDbHelper() {
+        return appDbHelper;
+    }
+
 
     public void showToastMessage(String toastMessage) {
         toastMessageLiveEvent.setValue(toastMessage);

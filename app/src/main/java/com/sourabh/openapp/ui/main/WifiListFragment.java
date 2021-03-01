@@ -2,6 +2,7 @@ package com.sourabh.openapp.ui.main;
 
 
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.view.View;
 
@@ -52,18 +53,33 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
     @Override
     public void initObservers() {
 
-//        wifiViewModel.getWifiList().observe(this,
-//                entityMovies -> inItRecyclerView(entityMovies));
-//        Log.e(TAG,"initObservers");
+        wifiViewModel.observeFromDb().observe(this, aBoolean -> {
+             if(!aBoolean){
+                 if (fragmentCommunicationListener != null) {
+                     fragmentCommunicationListener.onWifiClicked(wifiViewModel.
+                             getWifiLiveData().getValue());
+                 }
+             }
+        });
+
+        wifiViewModel.observeResult().observe(this, aBoolean -> {
+            Log.e(TAG,"initObservers " + aBoolean);
+            if(aBoolean){
+                baseActivity.showToast("Connected to wifi from list fragment");
+            } else {
+                baseActivity.showToast("Something went wrong please try again");
+            }
+        });
 
         wifiViewModel.getWifiList().observe(this, scanResults -> {
                ArrayList<Wifi> wifiArrayList = new ArrayList<>();
                 for(ScanResult scanResult : scanResults){
                     Wifi wifi = new Wifi(scanResult.SSID);
-                    wifi.setSignalStrength(String.valueOf(scanResult.level));
+                    int level = WifiManager.calculateSignalLevel(scanResult.level, 5);
+                    wifi.setSignalStrength(String.valueOf(level));
                     wifiArrayList.add(wifi);
                     Log.e(TAG, "wifi name " + scanResult.SSID + " signal speed "
-                     + scanResult.level);
+                     + level);
                 }
                 inItRecyclerView(wifiArrayList);
         });
@@ -90,9 +106,7 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
 
     @Override
     public void onWifiItemClick(Wifi wifi) {
-        if (fragmentCommunicationListener != null) {
-            fragmentCommunicationListener.onWifiClicked(wifi);
-        }
+        viewModel.fetchDataFromDb(wifi);
     }
 
     @Override
