@@ -54,7 +54,7 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
             Log.e(TAG,"initObservers " + aBoolean);
             if(aBoolean){
                 baseActivity.showToast("Connected to wifi");
-                baseActivity.onBackPressed();
+             //   baseActivity.onBackPressed();
             } else {
                 baseActivity.showToast("Something went wrong please try again");
             }

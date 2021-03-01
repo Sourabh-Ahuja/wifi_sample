@@ -47,7 +47,9 @@ public class WifiViewModel extends BaseViewModel {
          wifi.setWifiPassword(password);
          if(wifiRepository.connectToWifi(wifiName,password)){
              booleanSingleLiveEvent.setValue(true);
-             saveConnectedWifiToDB(wifi);
+             if(!wifi.isOpenNetwork()){
+                 saveConnectedWifiToDB(wifi);
+             }
          } else {
              booleanSingleLiveEvent.setValue(false);
          }
@@ -86,8 +88,7 @@ public class WifiViewModel extends BaseViewModel {
                            for(Wifi dbwifi : wifiList){
                                if(dbwifi.getWifiName().equalsIgnoreCase(wifi.getWifiName())){
                                    isNetworkSavedInDb = true;
-                                   booleanSingleLiveEvent.setValue(wifiRepository.
-                                           connectToWifi(dbwifi.getWifiName(),dbwifi.getWifiPassword()));
+                                   connectToWifi(dbwifi.getWifiName(),dbwifi.getWifiPassword());
                                    break;
                                }
                            }
@@ -98,6 +99,10 @@ public class WifiViewModel extends BaseViewModel {
                 });
         getCompositeDisposable().add(disposable);
 
+    }
+
+    public void connectToOpenWifi(String wifiName) {
+        booleanSingleLiveEvent.setValue(wifiRepository.connectToOpenWifi(wifiName));
     }
 
 }

@@ -77,9 +77,15 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
                     Wifi wifi = new Wifi(scanResult.SSID);
                     int level = WifiManager.calculateSignalLevel(scanResult.level, 5);
                     wifi.setSignalStrength(String.valueOf(level));
-                    wifiArrayList.add(wifi);
+                    String capabilities = scanResult.capabilities;
                     Log.e(TAG, "wifi name " + scanResult.SSID + " signal speed "
-                     + level);
+                            + level+ " capabilities : " + capabilities);
+                    if (capabilities.toUpperCase().contains("WEP")) {
+                        // WEP Network
+                        wifi.setOpenNetwork(false);
+                    } else wifi.setOpenNetwork(!capabilities.toUpperCase().contains("WPA")
+                            && !capabilities.toUpperCase().contains("WPA2"));
+                    wifiArrayList.add(wifi);
                 }
                 inItRecyclerView(wifiArrayList);
         });
@@ -106,7 +112,13 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
 
     @Override
     public void onWifiItemClick(Wifi wifi) {
-        viewModel.fetchDataFromDb(wifi);
+    //    viewModel.fetchDataFromDb(wifi);
+        Log.e(TAG,"onWifiItemClick " + wifi.isOpenNetwork());
+        if(wifi.isOpenNetwork()){
+            viewModel.connectToOpenWifi(wifi.getWifiName());
+        } else {
+            viewModel.fetchDataFromDb(wifi);
+        }
     }
 
     @Override

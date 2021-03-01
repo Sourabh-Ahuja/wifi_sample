@@ -23,6 +23,9 @@ public class Wifi implements Parcelable {
     @ColumnInfo(name="signal")
     String signalStrength;
 
+    @ColumnInfo(name = "open")
+    boolean isOpenNetwork;
+
     public Wifi(@NotNull String wifiName){
         this.wifiName = wifiName;
     }
@@ -31,6 +34,7 @@ public class Wifi implements Parcelable {
         wifiName = in.readString();
         wifiPassword = in.readString();
         signalStrength = in.readString();
+        isOpenNetwork = in.readByte() != 0;
     }
 
     public static final Creator<Wifi> CREATOR = new Creator<Wifi>() {
@@ -69,13 +73,21 @@ public class Wifi implements Parcelable {
         return signalStrength;
     }
 
-    @NotNull
+    public void setOpenNetwork(boolean openNetwork) {
+        isOpenNetwork = openNetwork;
+    }
+
+    public boolean isOpenNetwork() {
+        return isOpenNetwork;
+    }
+
     @Override
     public String toString() {
-        return "EntityWifi{" +
+        return "Wifi{" +
                 "wifiName='" + wifiName + '\'' +
                 ", wifiPassword='" + wifiPassword + '\'' +
                 ", signalStrength='" + signalStrength + '\'' +
+                ", isOpenNetwork=" + isOpenNetwork +
                 '}';
     }
 
@@ -89,5 +101,6 @@ public class Wifi implements Parcelable {
         dest.writeString(wifiName);
         dest.writeString(wifiPassword);
         dest.writeString(signalStrength);
+        dest.writeByte((byte) (isOpenNetwork ? 1 : 0));
     }
 }
