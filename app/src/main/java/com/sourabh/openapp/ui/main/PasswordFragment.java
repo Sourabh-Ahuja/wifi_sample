@@ -81,6 +81,8 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
         if (getArguments() != null) {
             Wifi wifi = getArguments().getParcelable(AppConstants.BUNDLE_WIFI);
             dataBinding.setWifi(wifi);
+            dataBinding.wifiNamePassword.setText(!isChangePassword ? wifi.getWifiName() :
+                    "Change Password for: " + wifi.getWifiName());
             dataBinding.backButton.setOnClickListener(v -> fragmentCommunicationListener.onBackButtonClick());
 
             dataBinding.submitButton.setOnClickListener(v -> {

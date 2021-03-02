@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -104,6 +105,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
 
         public void bindData(Wifi wifi, int position) {
             wifiItemLayoutBinding.setWifi(wifi);
+            if(wifi.isOpenNetwork()){
+                wifiItemLayoutBinding.options.setVisibility(View.GONE);
+            }
             wifiItemLayoutBinding.options.setOnClickListener(v ->
                     wifiItemClickListener.onMenuButtonClicked(wifi,position));
             wifiItemLayoutBinding.wifiType.setText(wifi.isOpenNetwork() ? "Open" : "Private");

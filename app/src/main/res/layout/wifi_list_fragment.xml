@@ -25,7 +25,7 @@
             android:textAlignment="center"
             android:text="@string/open_app"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/tv_gen_29" />
+            android:textSize="@dimen/tv_gen_16" />
 
         <Button
             android:id="@+id/theme"
