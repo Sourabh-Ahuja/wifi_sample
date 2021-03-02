@@ -22,6 +22,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+/**
+ * WifiListAdapter class use for showing the list item data
+ * **/
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiViewHolder> {
 
     private static final String TAG = "WifiListAdapter";

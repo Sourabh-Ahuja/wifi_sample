@@ -19,7 +19,7 @@ import dagger.Provides;
 
 @Module
 public class NetworkModule {
-
+//  providing dependency for app use
 
     @Provides
     @Singleton

@@ -22,7 +22,7 @@ import dagger.Provides;
 
 @Module
 public class AppModule {
-
+// providing dependency for app use
     @Provides
     @ApplicationContext
     Context providesContext(Application application) {

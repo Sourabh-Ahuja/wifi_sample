@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+// not using this class migth delete this later
 public class WifiConnectionReceiver extends BroadcastReceiver {
 
     private static final String TAG = "WifiConnectionReceiver";

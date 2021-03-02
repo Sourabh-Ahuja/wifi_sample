@@ -9,6 +9,9 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * model for storing the connected wifi network in room db
+ * */
 @Entity(tableName = "wifi")
 public class Wifi implements Parcelable {
 

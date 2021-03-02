@@ -11,7 +11,7 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ActivityBuilderModule {
-
+// providing dependency for wifi activity
     @ContributesAndroidInjector(
             modules = {
                     WifiActivityModule.class,

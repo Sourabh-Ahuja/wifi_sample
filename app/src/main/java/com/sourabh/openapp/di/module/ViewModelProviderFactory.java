@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import javax.inject.Singleton;
-
+/*
+* view model injection using a trick
+* */
 @Singleton
 public class ViewModelProviderFactory<V> implements ViewModelProvider.Factory {
 

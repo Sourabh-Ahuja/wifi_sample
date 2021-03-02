@@ -11,6 +11,9 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 
+/**
+ * OpenAppApplication class for the dagger implemtation
+ * */
 public class OpenAppApplication extends Application implements HasActivityInjector {
 
     @Inject

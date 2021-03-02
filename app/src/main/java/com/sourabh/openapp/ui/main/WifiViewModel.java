@@ -18,6 +18,9 @@ import io.reactivex.SingleObserver;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * WifiViewModel is used for getting data from wifirepository and observe changes in ui
+ * */
 public class WifiViewModel extends BaseViewModel {
 
     private static final String TAG = "WifiViewModel";
@@ -98,6 +101,9 @@ public class WifiViewModel extends BaseViewModel {
     }
 
 
+    /**
+     * getting data from db if wifi exist then connect to it
+     * */
     public void fetchDataFromDb(Wifi wifi) {
         setWifiSingleLiveEvent(wifi);
         Disposable disposable = getAppDbHelper().getAllWifi()

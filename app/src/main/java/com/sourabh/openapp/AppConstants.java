@@ -2,6 +2,9 @@ package com.sourabh.openapp;
 
 import android.Manifest;
 
+/**
+ * app wise constants
+ * */
 public class AppConstants {
 
     public static final int APP_DB_VERSION = 1;

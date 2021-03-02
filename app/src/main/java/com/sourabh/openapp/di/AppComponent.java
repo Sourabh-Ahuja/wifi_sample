@@ -12,7 +12,9 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
 
-
+/**
+ * dagger AppComponent
+ * */
 @Singleton
 @Component(
         modules = {

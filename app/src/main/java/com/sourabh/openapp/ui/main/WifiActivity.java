@@ -28,6 +28,9 @@ import dagger.android.DispatchingAndroidInjector;
 import static com.sourabh.openapp.AppConstants.PERMISSIONS_WIFI;
 import static com.sourabh.openapp.AppConstants.REQUEST_WIFI_PERMISSION;
 
+/**
+ * main activity which use for hosting the fragment
+ * **/
 public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel>
         implements FragmentCommunicationListener {
 
@@ -75,6 +78,7 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
         loadFragment(homeFragment, WIFI_LIST_FRAGMENT);
     }
 
+    // check for permission
     private boolean checkAppPermission() {
 
         boolean  permissionGranted = ContextCompat.checkSelfPermission(
@@ -83,16 +87,12 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
 
         return permissionGranted;
     }
-
+    /**
+     *  use for fragment transaction
+     *
+     */
     private void loadFragment(Fragment fragment, String tag) {
 
-        /**
-         *  #getSupportFragmentManager().beginTransaction  -    //create a transaction for transition here
-         *  #replace() -     // put the fragment in place
-         *  #addToBackStack() -     // this is the part that will cause a fragment to be added to backstack,
-         *                          // this way we can return to it at any time using this tag
-         *
-         */
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frameLayout, fragment, tag)
@@ -100,6 +100,9 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
                 .commit();
     }
 
+    /**
+     * permission callback
+     * **/
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_WIFI_PERMISSION) {
@@ -127,6 +130,9 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
         }
     }
 
+    /**
+     * dialog for why app needs permission
+     * **/
     public void showAlertDialog(String title, String mesage) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(WifiActivity.this);
         alertDialog.setTitle(title);

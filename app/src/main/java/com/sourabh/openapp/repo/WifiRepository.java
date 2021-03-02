@@ -29,7 +29,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
+/**
+ * WifiRepository for the doing the all wifi operation
+ * */
 @Singleton
 public class WifiRepository {
 
@@ -58,7 +60,10 @@ public class WifiRepository {
         }
         return wifiManager.startScan();
     }
-
+   /*
+   **  getWifiList will the available wifi list after scanning and assigning to live data for
+   * observing in activity/fragment
+   * */
     public SingleLiveEvent<List<ScanResult>> getWifiList() {
         Log.e(TAG, "getWifiList " + checkWifiScan());
         scanLiveEvent.setValue(getWifiScanResult());
@@ -69,6 +74,13 @@ public class WifiRepository {
         return wifiManager.getScanResults();
     }
 
+    /**
+     * use for connecting to wifi network
+     * parameters
+     * networkSSID: wifi name
+     * networkPassword;: password for wifi network
+     * isOpenWifi: to check for open wifi network
+     * */
     public boolean connectToWifi(String networkSSID, String networkPassword, boolean isOpenWifi) {
         if (!wifiManager.isWifiEnabled()) {
             wifiManager.setWifiEnabled(true);
@@ -92,11 +104,20 @@ public class WifiRepository {
         return wifiManager.reconnect();
     }
 
+    /**
+     * use for disconnecting wifi network
+     * */
     public void disConnect(String wifiName) {
         Log.e(TAG, "disConnect wifiName " + wifiName);
         wifiManager.disconnect();
     }
 
+    /**
+     * use for updating password of wifi network
+     * parameters
+     * networkSSID: wifi name
+     * networkPassword;: password for wifi network
+     * */
     public boolean changePassword(String ssid, String password) {
         WifiConfiguration wifiConf = null;
         //existing configured networks

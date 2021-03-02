@@ -15,6 +15,9 @@ import com.sourabh.openapp.ui.base.BaseFragment;
 
 import javax.inject.Inject;
 
+/**
+ * fragment for getting from input field
+ * **/
 public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgamentBinding> {
 
     private static final String TAG = "PasswordFragment";
@@ -52,8 +55,12 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
         return R.layout.password_frgament;
     }
 
+    /**
+     * observe changes when value assign to live data or when value in live data is changing
+     * */
     @Override
     public void initObservers() {
+
         wifiViewModel.observeResult().observe(this, aBoolean -> {
             Log.e(TAG,"initObservers observeResult " + aBoolean);
             if(aBoolean){
@@ -75,6 +82,9 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
         });
     }
 
+    /**
+     * for setting up ui
+     * */
     @Override
     public void setUp(View view) {
 

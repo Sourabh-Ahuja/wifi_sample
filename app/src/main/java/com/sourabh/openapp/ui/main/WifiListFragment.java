@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
-
+/**
+ * WifiListFragment used to show wifi list add using recyclerview
+ * **/
 public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragmentBinding>
         implements WifiListAdapter.WifiItemClickListener {
 
@@ -66,6 +68,10 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
     @Override
     public void initObservers() {
 
+        //
+        /**
+         * observing the live event data when we check in db for wifi network
+         * */
         wifiViewModel.observeFromDb().observe(getViewLifecycleOwner(), aBoolean -> {
             if(getViewLifecycleOwner().getLifecycle().getCurrentState()== Lifecycle.State.RESUMED){
                 if(!aBoolean){
@@ -78,6 +84,10 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
             }
         });
 
+
+        /**
+         * observing wifi connect or password change event
+         * */
         wifiViewModel.observeResult().observe(getViewLifecycleOwner(), aBoolean -> {
             Log.e(TAG,"initObservers " + aBoolean);
             if(getViewLifecycleOwner().getLifecycle().getCurrentState()== Lifecycle.State.RESUMED) {
@@ -89,6 +99,9 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
             }
         });
 
+        /**
+         * observing wifi list data
+         * */
         wifiViewModel.observeList().observe(this, scanResults -> {
                ArrayList<Wifi> wifiArrayList = new ArrayList<>();
                 for(ScanResult scanResult : scanResults){
@@ -114,18 +127,18 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
     public void setUp(View view) {
         Log.e(TAG,"Wifi list fragment loaded");
 
-        dataBinding.theme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(theme.equalsIgnoreCase("Day Theme")){
-                    theme = "Night Theme";
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    dataBinding.theme.setText(theme);
-                } else if(theme.equalsIgnoreCase("Night Theme")){
-                    theme = "Day Theme";
-                    dataBinding.theme.setText(theme);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                }
+        /**
+         * toggle between the app theme
+         * */
+        dataBinding.theme.setOnClickListener(v -> {
+            if(theme.equalsIgnoreCase("Day Theme")){
+                theme = "Night Theme";
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                dataBinding.theme.setText(theme);
+            } else if(theme.equalsIgnoreCase("Night Theme")){
+                theme = "Day Theme";
+                dataBinding.theme.setText(theme);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
 
@@ -133,6 +146,9 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
           getWifiList();
     }
 
+    /**
+     * checking for default theme mode set by android
+     * */
     private void checkDefaultDisplayMode() {
         int currentNightMode = getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK;
@@ -185,9 +201,14 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
     @Override
     public void onWifiItemClick(Wifi wifi) {
         Log.e(TAG,"onWifiItemClick " + wifi.isOpenNetwork());
+        /**
+         * calling method from viewmodel according for wifi connection
+         * */
         if(wifi.isOpenNetwork()){
+            // connecting to open wifi network
             viewModel.connectToWifi(wifi.getWifiName(),null,true);
         } else {
+            // check in db and then connect
             viewModel.fetchDataFromDb(wifi);
         }
     }

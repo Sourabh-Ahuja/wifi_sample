@@ -8,7 +8,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import io.reactivex.Single;
 
-
+/*
+* helper class for saving connected wifi network in room data
+* */
 @Singleton
 public class AppDbHelperImpl implements AppDbHelper {
 
