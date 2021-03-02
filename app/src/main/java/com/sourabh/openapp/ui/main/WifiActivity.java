@@ -146,9 +146,10 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
     }
 
     @Override
-    public void onWifiClicked(Wifi wifi, boolean chanegPassword) {
+    public void onWifiClicked(Wifi wifi, boolean changePassword) {
         PasswordFragment passwordFragment = PasswordFragment.newInstance(wifi);
         passwordFragment.setListener(this);
+        passwordFragment.setChangePassword(changePassword);
         loadFragment(passwordFragment, PASSWORD_FRAGMENT);
     }
 

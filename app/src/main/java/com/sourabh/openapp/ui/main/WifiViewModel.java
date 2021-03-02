@@ -31,6 +31,7 @@ public class WifiViewModel extends BaseViewModel {
 
     public SingleLiveEvent<List<ScanResult>> scanSingleLiveEvent = new SingleLiveEvent<>();
 
+    public SingleLiveEvent<Boolean> changePasswordEvent = new SingleLiveEvent<>();
 
     public WifiViewModel(WifiRepository wifiRepository,
                          SchedulerProvider schedulerProvider, AppDbHelper appDbHelper) {
@@ -89,7 +90,11 @@ public class WifiViewModel extends BaseViewModel {
     }
 
     public void changePassword(String wifiName, String password) {
-        wifiRepository.changePassword(wifiName,password);
+        changePasswordEvent.setValue(wifiRepository.changePassword(wifiName,password));
+    }
+
+    public SingleLiveEvent<Boolean> observePasswordChangeEvent() {
+        return changePasswordEvent;
     }
 
 

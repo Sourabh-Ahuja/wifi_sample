@@ -32,7 +32,7 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
 
     String selectedOrder = "DisConnect";
     int checkedItem = 0;
-    private static final String DISCONNECT = "DisConnect";
+    private static final String DISCONNECT = "Disconnect";
     private static final String CHANGE_PASSWORD = "Change Password";
     String theme = "";
 
@@ -193,11 +193,11 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
     }
 
     @Override
-    public void onMenuButtonClicked(String wifiName, int position) {
-       showAlertDialog(wifiName);
+    public void onMenuButtonClicked(Wifi wifi, int position) {
+       showAlertDialog(wifi);
     }
 
-    private void showAlertDialog(String wifiName) {
+    private void showAlertDialog(Wifi wifi) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(baseActivity);
         alertDialog.setTitle("Sort movies by");
         String[] items = {DISCONNECT,CHANGE_PASSWORD};
@@ -221,10 +221,9 @@ public class WifiListFragment extends BaseFragment<WifiViewModel, WifiListFragme
             Log.e(TAG,"selectedOrder " + selectedOrder);
             if(selectedOrder.equalsIgnoreCase(DISCONNECT)){
                 movieListAdapter.clearList(true);
-                viewModel.disConnect(wifiName);
+                viewModel.disConnect(wifi.getWifiName());
             } else if(selectedOrder.equalsIgnoreCase(CHANGE_PASSWORD)){
-                fragmentCommunicationListener.onWifiClicked(wifiViewModel.
-                        getWifiLiveData().getValue(),true);
+                fragmentCommunicationListener.onWifiClicked(wifi,true);
             }
         });
         alertDialog.setNegativeButton("Cancel", (dialog, which) -> {

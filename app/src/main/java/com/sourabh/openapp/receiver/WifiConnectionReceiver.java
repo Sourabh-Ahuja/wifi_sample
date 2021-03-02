@@ -1,14 +1,19 @@
 package com.sourabh.openapp.receiver;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -101,5 +106,53 @@ public class WifiConnectionReceiver extends BroadcastReceiver {
         randomIntentFilter.addAction(ACTION_CONNECT_TO_WIFI);
         return randomIntentFilter;
     }
+
+//    public boolean changePassword(String ssid, String password) {
+//        WifiConfiguration wifiConf = null;
+//        WifiConfiguration savedConf = null;
+//
+//        //existing configured networks
+//        Log.e(TAG,"changePassword limit " + ssid);
+//
+//        if (ActivityCompat.checkSelfPermission(context,
+//                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return false;
+//        }
+//        List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+//
+//        if(list!=null) {
+//            for( WifiConfiguration i : list ) {
+//                if (i.SSID != null && i.SSID.equals("\"" + ssid + "\"")) {
+//                    savedConf = i;
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if(savedConf!=null) {
+//            wifiConf = savedConf;
+//        } else {
+//            wifiConf = new WifiConfiguration();
+//        }
+//
+//        wifiConf.SSID = String.format("\"%s\"", ssid);
+//        wifiConf.preSharedKey = String.format("\"%s\"", password);
+//
+//        int netId;
+//
+//        if(savedConf!=null) {
+//            netId = wifiManager.updateNetwork(wifiConf);
+//            Log.d(TAG, "changePassword configuration updated " + netId);
+//        } else {
+//            netId = wifiManager.addNetwork(wifiConf);
+//            Log.d(TAG, " changePassword configuration created " + netId);
+//        }
+//
+//        wifiManager.saveConfiguration();
+//        wifiManager.disconnect();
+//        wifiManager.enableNetwork(netId, true);
+//
+//        return wifiManager.reconnect();
+//    }
 
 }

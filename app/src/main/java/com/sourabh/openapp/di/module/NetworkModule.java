@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sourabh.openapp.database.AppDataBase;
 import com.sourabh.openapp.database.AppDbHelper;
 import com.sourabh.openapp.database.AppDbHelperImpl;
 import com.sourabh.openapp.di.ApplicationContext;
@@ -35,15 +36,14 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    WifiRepository provideWifiRepository(@ApplicationContext Context context,
-                                            AppDbHelper appDbHelper) {
-        return new WifiRepository(context, appDbHelper);
+    WifiRepository provideWifiRepository(@ApplicationContext Context context) {
+        return new WifiRepository(context);
     }
 
     @Provides
     @Singleton
-    AppDbHelper provideAppDbHelper(AppDbHelperImpl dbHelper) {
-        return dbHelper;
+    AppDbHelper provideAppDbHelper(AppDataBase appDataBase) {
+        return new AppDbHelperImpl(appDataBase);
     }
 
 }

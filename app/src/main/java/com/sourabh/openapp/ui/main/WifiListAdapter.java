@@ -31,7 +31,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
     public interface WifiItemClickListener {
         void onWifiItemClick(Wifi movie);
 
-        void onMenuButtonClicked(String wifiName, int position);
+        void onMenuButtonClicked(Wifi wifi, int position);
     }
 
     private List<Wifi> wifiArrayList = new ArrayList<>();
@@ -105,7 +105,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
         public void bindData(Wifi wifi, int position) {
             wifiItemLayoutBinding.setWifi(wifi);
             wifiItemLayoutBinding.options.setOnClickListener(v ->
-                    wifiItemClickListener.onMenuButtonClicked(wifi.getWifiName(),position));
+                    wifiItemClickListener.onMenuButtonClicked(wifi,position));
             wifiItemLayoutBinding.wifiType.setText(wifi.isOpenNetwork() ? "Open" : "Private");
             wifiItemLayoutBinding.setWifiClickListener(wifiItemClickListener);
             wifiItemLayoutBinding.containerItem.setOnClickListener(v -> {

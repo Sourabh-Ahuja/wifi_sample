@@ -55,10 +55,20 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
     @Override
     public void initObservers() {
         wifiViewModel.observeResult().observe(this, aBoolean -> {
-            Log.e(TAG,"initObservers " + aBoolean);
+            Log.e(TAG,"initObservers observeResult " + aBoolean);
             if(aBoolean){
                 baseActivity.showToast("Connected to wifi");
                  fragmentCommunicationListener.onBackButtonClick();
+            } else {
+                baseActivity.showToast("Something went wrong please try again");
+            }
+        });
+
+        wifiViewModel.observePasswordChangeEvent().observe(this, aBoolean -> {
+            Log.e(TAG,"initObservers observePasswordChangeEvent " + aBoolean);
+            if(aBoolean){
+                baseActivity.showToast("Password Updated");
+                fragmentCommunicationListener.onBackButtonClick();
             } else {
                 baseActivity.showToast("Something went wrong please try again");
             }
@@ -76,8 +86,14 @@ public class PasswordFragment extends BaseFragment<WifiViewModel, PasswordFrgame
             dataBinding.submitButton.setOnClickListener(v -> {
                 if(!TextUtils.isEmpty(dataBinding.passwordField.getText().toString())){
                     if(dataBinding.passwordField.getText().toString().length() >= 8){
-                        viewModel.connectToWifi(wifi.getWifiName(),
-                                dataBinding.passwordField.getText().toString(),false);
+                        Log.e(TAG,"isChangePassword " + isChangePassword);
+                        if(isChangePassword){
+                            viewModel.changePassword(wifi.getWifiName(),
+                                    dataBinding.passwordField.getText().toString());
+                        } else {
+                            viewModel.connectToWifi(wifi.getWifiName(),
+                                    dataBinding.passwordField.getText().toString(),false);
+                        }
                     } else {
                         baseActivity.showToast("Password must be greater than " +
                                 "or equal to 8 characters");
