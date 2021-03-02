@@ -29,23 +29,26 @@ public class WifiViewModel extends BaseViewModel {
 
     public SingleLiveEvent<Wifi> wifiSingleLiveEvent = new SingleLiveEvent<>();
 
+    public SingleLiveEvent<List<ScanResult>> scanSingleLiveEvent = new SingleLiveEvent<>();
+
+
     public WifiViewModel(WifiRepository wifiRepository,
                          SchedulerProvider schedulerProvider, AppDbHelper appDbHelper) {
         super(wifiRepository,schedulerProvider, appDbHelper);
     }
 
-    public LiveData<List<ScanResult>> getWifiList() {
-        return wifiRepository.getWifiList();
+    public void getWifiList() {
+        scanSingleLiveEvent.setValue(wifiRepository.getWifiList().getValue());
     }
 
     public LiveData<Boolean> observeResult() {
         return booleanSingleLiveEvent;
     }
 
-    public void connectToWifi(String wifiName, String password) {
+    public void connectToWifi(String wifiName, String password,boolean isOpenWifi) {
          Wifi wifi = new Wifi(wifiName);
          wifi.setWifiPassword(password);
-         if(wifiRepository.connectToWifi(wifiName,password)){
+         if(wifiRepository.connectToWifi(wifiName,password,isOpenWifi)){
              booleanSingleLiveEvent.setValue(true);
              if(!wifi.isOpenNetwork()){
                  saveConnectedWifiToDB(wifi);
@@ -73,9 +76,22 @@ public class WifiViewModel extends BaseViewModel {
         wifiSingleLiveEvent.setValue(wifi);
     }
 
-    public LiveData<Boolean> observeFromDb() {
+    public SingleLiveEvent<Boolean> observeFromDb() {
         return dBBooleanEvent;
     }
+
+    public SingleLiveEvent<List<ScanResult>> observeList() {
+        return scanSingleLiveEvent;
+    }
+
+    public void disConnect(String wifiName) {
+        wifiRepository.disConnect(wifiName);
+    }
+
+    public void changePassword(String wifiName, String password) {
+        wifiRepository.changePassword(wifiName,password);
+    }
+
 
     public void fetchDataFromDb(Wifi wifi) {
         setWifiSingleLiveEvent(wifi);
@@ -88,7 +104,7 @@ public class WifiViewModel extends BaseViewModel {
                            for(Wifi dbwifi : wifiList){
                                if(dbwifi.getWifiName().equalsIgnoreCase(wifi.getWifiName())){
                                    isNetworkSavedInDb = true;
-                                   connectToWifi(dbwifi.getWifiName(),dbwifi.getWifiPassword());
+                                   connectToWifi(dbwifi.getWifiName(),dbwifi.getWifiPassword(),wifi.isOpenNetwork());
                                    break;
                                }
                            }
@@ -101,8 +117,8 @@ public class WifiViewModel extends BaseViewModel {
 
     }
 
-    public void connectToOpenWifi(String wifiName) {
-        booleanSingleLiveEvent.setValue(wifiRepository.connectToOpenWifi(wifiName));
-    }
+//    public void connectToOpenWifi(String wifiName) {
+//        booleanSingleLiveEvent.setValue(wifiRepository.connectToOpenWifi(wifiName));
+//    }
 
 }

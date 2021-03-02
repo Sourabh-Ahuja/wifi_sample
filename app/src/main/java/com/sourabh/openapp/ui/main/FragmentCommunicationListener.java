@@ -7,7 +7,7 @@ import com.sourabh.openapp.model.Wifi;
 
 public interface FragmentCommunicationListener {
 
-    void onWifiClicked(Wifi wifi);
+    void onWifiClicked(Wifi wifi, boolean changePassword);
 
     void onBackButtonClick();
 }

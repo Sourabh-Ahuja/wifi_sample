@@ -2,6 +2,7 @@ package com.sourabh.openapp.ui.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import dagger.android.support.AndroidSupportInjection;
 
 public abstract class BaseFragment<VM extends BaseViewModel, Binding extends ViewDataBinding>
         extends Fragment {
+
+    private static final String TAG = "BaseFragment";
 
 
     public BaseActivity baseActivity;
@@ -92,4 +95,5 @@ public abstract class BaseFragment<VM extends BaseViewModel, Binding extends Vie
         baseActivity = null;
         super.onDetach();
     }
+
 }

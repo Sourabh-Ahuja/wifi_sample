@@ -2,7 +2,10 @@ package com.sourabh.openapp.repo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
@@ -19,6 +22,7 @@ import com.sourabh.openapp.di.ApplicationContext;
 import com.sourabh.openapp.model.Wifi;
 import com.sourabh.openapp.utils.SingleLiveEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,17 +40,19 @@ public class WifiRepository {
     private WifiManager wifiManager;
 
     public SingleLiveEvent<List<ScanResult>> scanLiveEvent = new SingleLiveEvent<>();
-    public SingleLiveEvent<Boolean> booleanSingleLiveEvent = new SingleLiveEvent<>();
+
 
     @Inject
     public WifiRepository(Context context, AppDbHelper appDbHelper) {
         this.appDbHelper = appDbHelper;
         this.context = context;
-        wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) context.getApplicationContext().
+                getSystemService(Context.WIFI_SERVICE);
     }
 
     private boolean checkWifiScan() {
         if (!wifiManager.isWifiEnabled()) {
+            Log.e(TAG,"yaha se");
             Toast.makeText(context, "Wifi is not enable. Turning on wifi",
                     Toast.LENGTH_SHORT).show();
             wifiManager.setWifiEnabled(true);
@@ -54,7 +60,7 @@ public class WifiRepository {
         return wifiManager.startScan();
     }
 
-    public LiveData<List<ScanResult>> getWifiList() {
+    public SingleLiveEvent<List<ScanResult>> getWifiList() {
         Log.e(TAG, "getWifiList " + checkWifiScan());
         scanLiveEvent.setValue(getWifiScanResult());
         return scanLiveEvent;
@@ -64,39 +70,36 @@ public class WifiRepository {
         return wifiManager.getScanResults();
     }
 
-    public boolean connectToWifi(String networkSSID, String networkPassword) {
-        if (!wifiManager.isWifiEnabled()) {
-            wifiManager.setWifiEnabled(true);
-        }
-
-
-        WifiConfiguration conf = new WifiConfiguration();
-        conf.SSID = String.format("\"%s\"", networkSSID);
-        conf.preSharedKey = String.format("\"%s\"", networkPassword);
-        int netId = wifiManager.addNetwork(conf);
-        wifiManager.disconnect();
-        wifiManager.enableNetwork(netId, true);
-        Log.e(TAG,"connectToWifi called netId " + netId + " networkPassword " + networkPassword);
-
-        return wifiManager.reconnect();
-    }
-
-    public boolean connectToOpenWifi(String networkSSID){
+    public boolean connectToWifi(String networkSSID, String networkPassword, boolean isOpenWifi) {
         if (!wifiManager.isWifiEnabled()) {
             wifiManager.setWifiEnabled(true);
         }
 
         WifiConfiguration conf = new WifiConfiguration();
         conf.SSID = String.format("\"%s\"", networkSSID);
-        conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-
+        if(isOpenWifi){
+            conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        } else {
+            conf.preSharedKey = String.format("\"%s\"", networkPassword);
+        }
         int netId = wifiManager.addNetwork(conf);
+        Log.e(TAG,"connectToWifi called netId " + netId + " networkPassword " +
+                networkPassword + " isOpenWifi " + isOpenWifi);
+
         wifiManager.disconnect();
         wifiManager.enableNetwork(netId, true);
+
         return wifiManager.reconnect();
     }
 
+    public void disConnect(String wifiName) {
+      Log.e(TAG,"disConnect wifiName " + wifiName);
+      wifiManager.disconnect();
+    }
 
+    public void changePassword(String wifiName, String password) {
+
+    }
 
 
 }

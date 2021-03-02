@@ -31,7 +31,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
     public interface WifiItemClickListener {
         void onWifiItemClick(Wifi movie);
 
-        void onSubmitButtonClick(String wifiName, String password);
+        void onMenuButtonClicked(String wifiName, int position);
     }
 
     private List<Wifi> wifiArrayList = new ArrayList<>();
@@ -49,6 +49,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
         //  this.movieList.clear();
         Log.e(TAG," movieList after clear" + this.wifiArrayList.size());
         Log.e(TAG," movieList para" + wifiArrayList.size());
+        if(this.wifiArrayList.size() > 0){
+            wifiArrayList.clear();
+        }
         this.wifiArrayList.addAll(wifiArrayList);
         Log.e(TAG," movieList " + this.wifiArrayList.size());
 
@@ -82,7 +85,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
             movieItemViewHolder.wifiItemLayoutBinding.containerItem.getLayoutParams().height = height / 10;
         }
 
-        movieItemViewHolder.bindData(wifiArrayList.get(i));
+        movieItemViewHolder.bindData(wifiArrayList.get(i), i);
     }
 
     @Override
@@ -99,8 +102,11 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiVi
             this.wifiItemLayoutBinding = wifiItemLayoutBinding;
         }
 
-        public void bindData(Wifi wifi) {
+        public void bindData(Wifi wifi, int position) {
             wifiItemLayoutBinding.setWifi(wifi);
+            wifiItemLayoutBinding.options.setOnClickListener(v ->
+                    wifiItemClickListener.onMenuButtonClicked(wifi.getWifiName(),position));
+            wifiItemLayoutBinding.wifiType.setText(wifi.isOpenNetwork() ? "Open" : "Private");
             wifiItemLayoutBinding.setWifiClickListener(wifiItemClickListener);
             wifiItemLayoutBinding.containerItem.setOnClickListener(v -> {
                 wifiItemClickListener.onWifiItemClick(wifi);

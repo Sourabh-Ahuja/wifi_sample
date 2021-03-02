@@ -110,12 +110,15 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
                 } else {
                     Log.e(TAG,"Permission denied 1 " + grantResults.toString());
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    showAlertDialog("Alert","Application needs access to the wifi " +
+                            "to connect with the wifi.");
                 }
 //                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                    permissionGranted = true;
 //                } else {
 //                    Log.e(TAG,"Permission denied 1");
-//                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+//                    showAlertDialog("Alert","Application needs access to the wifi " +
+//                            "to connect with the wifi.");
 //                }
             } else {
                 showAlertDialog("Alert","Application needs access to the wifi " +
@@ -143,7 +146,7 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
     }
 
     @Override
-    public void onWifiClicked(Wifi wifi) {
+    public void onWifiClicked(Wifi wifi, boolean chanegPassword) {
         PasswordFragment passwordFragment = PasswordFragment.newInstance(wifi);
         passwordFragment.setListener(this);
         loadFragment(passwordFragment, PASSWORD_FRAGMENT);
@@ -151,6 +154,17 @@ public class WifiActivity extends BaseActivity<ActivityWifiBinding,WifiViewModel
 
     @Override
     public void onBackButtonClick() {
+        onBackPressed();
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager() != null && getSupportFragmentManager().
+                findFragmentByTag(PASSWORD_FRAGMENT) != null) {
+            // I'm viewing MovieDetailFragment
+            getSupportFragmentManager().popBackStackImmediate(WIFI_LIST_FRAGMENT, 0);
+        } else {
+            finish();
+        }
     }
 }
